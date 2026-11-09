@@ -1,0 +1,48 @@
+apiVersion: v3.2.0
+kind: DataContract
+id: odc.commerce.customer-order-facts
+name: Customer Order Facts
+version: 2.0.0
+status: active
+domain: commerce
+dataProduct: dp.commerce.customer-order-facts
+description:
+  purpose: Curated order facts for analytics, churn features, and support agents
+  limitations: Does not include PII email or payment instruments
+  usage: BI, feature pipelines, read-only agent tools
+
+schema:
+  - name: customer_order_facts
+    logicalType: object
+    physicalName: ANALYTICS.COMMERCE.CUSTOMER_ORDER_FACTS
+    physicalType: table
+    description: One row per order_id
+    properties:
+      - name: order_id
+        logicalType: string
+        primaryKey: true
+        required: true
+      - name: customer_id
+        logicalType: string
+        required: true
+      - name: status
+        logicalType: string
+        required: true
+      - name: total_cents
+        # BREAKING: integer -> number (double)
+        logicalType: number
+        required: true
+      - name: updated_at
+        logicalType: timestamp
+        required: true
+
+sla:
+  - property: freshness
+    value: 1
+    unit: hours
+    element: customer_order_facts
+
+team:
+  - username: commerce-data
+    role: owner
+    dateIn: "2026-01-01"

@@ -1,0 +1,33 @@
+apiVersion: v1.1.0
+kind: DataProduct
+id: dp.commerce.customer-order-facts
+name: Customer Order Facts
+version: 1.2.0
+status: active
+domain: commerce
+description:
+  purpose: Gold order facts for analytics and agent support tools
+  limitations: No payment PII
+
+outputPorts:
+  - name: table_warehouse
+    description: Snowflake curated table
+    type: table
+    contractId: odc.commerce.customer-order-facts
+  - name: mcp_get_order_status
+    description: Read-only MCP tool for support agents
+    type: mcp_tool
+    contractId: odc.commerce.customer-order-facts
+    customProperties:
+      - property: sideEffectClass
+        value: read-only
+      - property: toolName
+        value: get_order_status
+      - property: inputFields
+        value: order_id
+
+customProperties:
+  - property: agentReadinessLevel
+    value: "2"
+  - property: schemaStabilityDays
+    value: "45"
